@@ -5,17 +5,15 @@ const { student, mentor } = require("../shared/db");
 
 router.post("/newMentor", async (req, res) => {
   console.log("assignMentorToStudent");
-  //req -> has mentor id + studentsId
-  //to do : add students to mentor & viceversa
+
   try {
-    //updating studentList in mentor doc
     const mentorData = await mentor.findById(req.body.mentorId);
     mentorData.studentsAssigned = [
       ...mentorData.studentsAssigned,
       ...req.body.studentsArray,
     ];
     mentorData.save();
-    //adding mentor to all respective students
+
     req.body.studentsArray.forEach(async (stud) => {
       const temp = await student.findById(stud);
       temp.mentorAssigned = req.body.mentorId;
@@ -29,7 +27,6 @@ router.post("/newMentor", async (req, res) => {
   }
 });
 
-// ------------------------------------------------------------------------
 
 router.post("/modifyMentor", async (req, res) => {
  
